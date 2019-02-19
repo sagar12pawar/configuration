@@ -94,6 +94,13 @@ if [[ -f my-passwords.yml ]]; then
     EXTRA_VARS="-e@$(pwd)/my-passwords.yml $EXTRA_VARS"
 fi
 
+if [[ -f config.yml ]]; then
+    echo "# native config tweaks" > native-config.yml
+    echo "EDXAPP_PREVIEW_LMS_BASE: EDXAPP_LMS_BASE" >> native-config.yml
+    echo "EDXAPP_LOGIN_REDIRECT_WHITELIST: [ \"{{ EDXAPP_CMS_BASE }}\" ]" >> native-config.yml
+    EXTRA_VARS="-e@$(pwd)/config.yml -e@$(pwd)/native-config.yml $EXTRA_VARS"
+fi
+
 CONFIGURATION_VERSION=${CONFIGURATION_VERSION-$OPENEDX_RELEASE}
 
 ##
@@ -114,6 +121,7 @@ sudo -H pip install -r requirements.txt
 ##
 ## Run the edx_sandbox.yml playbook in the configuration/playbooks directory
 ##
+echo EXTRA_VARS: $EXTRA_VARS
 cd /var/tmp/configuration/playbooks && sudo -E ansible-playbook -c local ./edx_sandbox.yml -i "localhost," $EXTRA_VARS "$@"
 ansible_status=$?
 
