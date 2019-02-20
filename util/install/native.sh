@@ -98,6 +98,7 @@ if [[ -f config.yml ]]; then
     echo "# native config tweaks" > native-config.yml
     echo "EDXAPP_PREVIEW_LMS_BASE: EDXAPP_LMS_BASE" >> native-config.yml
     echo "EDXAPP_LOGIN_REDIRECT_WHITELIST: [ \"{{ EDXAPP_CMS_BASE }}\" ]" >> native-config.yml
+    echo "EDXAPP_LMS_BASE_SCHEME: http" >> native-config.yml
     EXTRA_VARS="-e@$(pwd)/config.yml -e@$(pwd)/native-config.yml $EXTRA_VARS"
 fi
 
